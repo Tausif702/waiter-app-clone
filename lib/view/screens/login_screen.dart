@@ -66,7 +66,6 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         await SharedPref.setBool(PrefKeys.isLogin, true);
 
-        // Await reading the values, since these are async methods
         bool isLogin = await SharedPref.getLogin();
         String token = await SharedPref.getString(PrefKeys.userToken);
 
@@ -90,132 +89,137 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 50),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Center(
-              child: Image.asset(
-                'assets/images/logo.png',
-                width: 200,
-                height: 200,
-                fit: BoxFit.contain,
+      resizeToAvoidBottomInset: true,  // This is default but explicitly mentioned
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 50),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Center(
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  width: 200,
+                  height: 200,
+                  fit: BoxFit.contain,
+                ),
               ),
-            ),
-            const SizedBox(height: 40),
+              const SizedBox(height: 40),
 
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.4),
-                    blurRadius: 1,
-                    spreadRadius: 2,
-                    offset: Offset(1, 1),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 80,
-                    child: CountryCodePicker(
-                      onChanged: (code) {
-                        setState(() {
-                          _countryCode = code.dialCode ?? '+91';
-                        });
-                      },
-                      initialSelection: 'IN',
-                      favorite: ['+91', 'IN'],
-                      showFlag: false,
-                      showDropDownButton: true,
-                      padding: EdgeInsets.zero,
-                      dialogBackgroundColor: Colors.white,
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.4),
+                      blurRadius: 1,
+                      spreadRadius: 2,
+                      offset: Offset(1, 1),
                     ),
-                  ),
-                  Container(width: 1, height: 24, color: Colors.grey),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: TextField(
-                      controller: phoneController,
-                      keyboardType: TextInputType.phone,
-                      decoration: const InputDecoration(
-                        hintText: 'Enter mobile number',
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 80,
+                      child: CountryCodePicker(
+                        onChanged: (code) {
+                          setState(() {
+                            _countryCode = code.dialCode ?? '+91';
+                          });
+                        },
+                        initialSelection: 'IN',
+                        favorite: ['+91', 'IN'],
+                        showFlag: false,
+                        showDropDownButton: true,
+                        padding: EdgeInsets.zero,
+                        dialogBackgroundColor: Colors.white,
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 20),
-
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.4),
-                    blurRadius: 1,
-                    spreadRadius: 2,
-                    offset: Offset(1, 1),
-                  ),
-                ],
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: TextField(
-                controller: passwordController,
-                obscureText: _obscurePassword,
-                decoration: InputDecoration(
-                  hintText: 'Enter password',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                  fillColor: Colors.white,
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
+                    Container(width: 1, height: 24, color: Colors.grey),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: TextField(
+                        controller: phoneController,
+                        keyboardType: TextInputType.phone,
+                        decoration: const InputDecoration(
+                          hintText: 'Enter mobile number',
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                        ),
+                      ),
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword = !_obscurePassword;
-                      });
-                    },
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.4),
+                      blurRadius: 1,
+                      spreadRadius: 2,
+                      offset: Offset(1, 1),
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: TextField(
+                  controller: passwordController,
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
+                    hintText: 'Enter password',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                    ),
                   ),
                 ),
               ),
-            ),
 
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-            Align(
-              alignment: Alignment.center,
-              child: TextButton(
-                onPressed: () {},
-                child: const Text(
-                  'Reset Password',
-                  style: TextStyle(color: Color(0xFF218C4E)),
+              Align(
+                alignment: Alignment.center,
+                child: TextButton(
+                  onPressed: () {
+                    // Reset password logic here
+                  },
+                  child: const Text(
+                    'Reset Password',
+                    style: TextStyle(color: Color(0xFF218C4E)),
+                  ),
                 ),
               ),
-            ),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            Utils.loginButton(
-              text: _isLoading ? "Logging in..." : "Login",
-              onPressed: _login,
-            ),
-          ],
+              Utils.loginButton(
+                text: _isLoading ? "Logging in..." : "Login",
+                onPressed: _login,
+              ),
+            ],
+          ),
         ),
       ),
     );
